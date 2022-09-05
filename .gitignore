@@ -34,3 +34,4 @@
 build
 build_android
 .cache
+.vscode

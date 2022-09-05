@@ -10,6 +10,20 @@ Window{
     width: 800
     height: 600
 
+    Connections{
+        target: SlideShow
+        function onImageChanged(str : string) {
+            changeImage(str)
+            }
+        }
+
+    
+
+    function changeImage(str : string)
+    {
+        img.source = str
+    }
+
     Item
     {
         focus: true
@@ -26,8 +40,11 @@ Window{
         }
 
     Image {
+        id: img
+        objectName: "img"
         anchors.centerIn: parent
-        source: "/sunset.jpg"
+        cache: false
+        source: "/sunset0.jpg"
     }
 
     }
