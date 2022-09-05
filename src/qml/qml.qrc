@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file alias="sunset.jpg">./images/sunset.jpg</file>
+    </qresource>
+</RCC>
