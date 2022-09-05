@@ -8,6 +8,8 @@ project(
   LANGUAGES CXX)
 
 find_package(Qt5 REQUIRED COMPONENTS Core Quick QuickWidgets Gui)
+set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
+
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -17,7 +19,17 @@ target_sources(SlideShow PRIVATE src/slideshow.cpp)
 target_link_libraries(SlideShow PUBLIC Qt5::Core)
 target_compile_features(SlideShow PRIVATE cxx_std_17)
 
-add_executable(QMLDesktopExample)
+
+if(NOT ANDROID)
+  add_executable(QMLDesktopExample)
+elseif(ANDROID)
+  add_library(QMLDesktopExample SHARED)
+  find_package(Qt5 REQUIRED AndroidExtras)
+  target_link_libraries(QMLDesktopExample PRIVATE Qt5::AndroidExtras)
+  set_target_properties(QMLDesktopExample PROPERTIES LIBRARY_OUTPUT_NAME CMakeQtAPKExample)
+  add_dependencies(apk QMLDesktopExample)
+endif()
+
 target_sources(QMLDesktopExample PRIVATE src/main.cpp src/qml/qml.qrc)
 target_compile_features(QMLDesktopExample PRIVATE cxx_std_17)
 target_link_libraries(QMLDesktopExample PRIVATE Qt5::Core Qt5::Quick SlideShow)
