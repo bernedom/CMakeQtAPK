@@ -22,9 +22,7 @@
                 "ANDROID_ABI": "armeabi-v7a",
                 "ANDROID_PLATFORM": "23",
                 "ANDROID_SDK": "/home/doeme/Android/Sdk",
-                "CMAKE_FIND_ROOT_PATH_MODE_PACKAGE": "BOTH",
-                "CMAKE_FIND_ROOT_PATH_MODE_LIBRARY": "BOTH",
-                "CMAKE_FIND_ROOT_PATH_MODE_INCLUDE": "BOTH"
+                "CMAKE_FIND_ROOT_PATH_MODE_PACKAGE": "BOTH"                
             },
             "environment": {
                 "JAVA_HOME": "/usr/lib/jvm/java-1.8.0-openjdk-amd64",
