@@ -1,0 +1,21 @@
+{
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "extensions": [
+        "ms-vscode.cpptools",
+        "ms-vscode.cmake-tools",
+        "vadimcn.vscode-lldb",
+        "cheshirekow.cmake-format",
+        "ms-vscode.cpptools-extension-pack",
+        "eamodio.gitlens"
+    ],
+    "remoteEnv": {
+        "DISPLAY": "${localEnv:DISPLAY}"
+    },
+    "runArgs": [
+        "--device=/dev/dri:/dev/dri",
+        "--net=host",
+        "--cpus=6"
+    ]
+}
