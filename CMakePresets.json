@@ -17,17 +17,18 @@
         {
             "name": "android",
             "hidden": true,
-            "toolchainFile": "/home/doeme/Android/android-ndk-r20b/build/cmake/android.toolchain.cmake",
+            "toolchainFile": "/opt/android-ndk/build/cmake/android.toolchain.cmake",
             "cacheVariables": {
                 "ANDROID_ABI": "armeabi-v7a",
                 "ANDROID_PLATFORM": "23",
-                "ANDROID_SDK": "/home/doeme/Android/Sdk",
-                "CMAKE_FIND_ROOT_PATH_MODE_PACKAGE": "BOTH"                
+                "ANDROID_SDK": "/opt/android-sdk",
+                "CMAKE_FIND_ROOT_PATH_MODE_PACKAGE": "BOTH",
+                "ANDROID_BUILD_ABI_armeabi-v7a" : "ON"
             },
             "environment": {
                 "JAVA_HOME": "/usr/lib/jvm/java-1.8.0-openjdk-amd64",
-                "ANDROID_SDK_ROOT": "/home/doeme/Android/Sdk",
-                "ANDROID_NDK_ROOT": "/home/doeme/Android/android-ndk-r20b"
+                "ANDROID_SDK_ROOT": "/opt/android-sdk",
+                "ANDROID_NDK_ROOT": "/opt/android-ndk"
             },
             "binaryDir": "${sourceDir}/build_android"
         },
@@ -35,7 +36,7 @@
             "name": "Qt-desktop",
             "hidden": true,
             "cacheVariables": {
-                "CMAKE_PREFIX_PATH": "/home/doeme/Qt/5.15.2/gcc_64/"
+                "CMAKE_PREFIX_PATH": "/usr/local/Qt/gcc_64"
             },
             "binaryDir": "${sourceDir}/build"
         },
@@ -43,7 +44,7 @@
             "name": "Qt-android",
             "hidden": true,
             "cacheVariables": {
-                "CMAKE_PREFIX_PATH": "/home/doeme/Qt/5.15.2/android"
+                "CMAKE_PREFIX_PATH": "/usr/local/Qt/android"
             }
         },
         {

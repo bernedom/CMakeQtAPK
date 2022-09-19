@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:20.04
 
 ARG NDK_TOOLCHAIN_PREFIX=arm-linux-androideabi
 ARG NDK_VERSION=r20b
@@ -21,42 +21,27 @@ ENV DEBIAN_FRONTEND=noninteractive \
     ANDROID_NDK_HOST=linux-x86_64 \
     ANDROID_NDK_PLATFORM=${SDK_PLATFORM} 
 
-ARG QT_VERSION=5.15.2    
-    
-
 RUN apt-get update && apt-get install -y gdb build-essential python3 curl clang-tidy git libqt5qml5 ccache openjdk-8-jdk-headless \
-    openjdk-8-jre-headless ninja ant mesa-common-dev libglu1-mesa-dev libfontconfig1-dev libfreetype6-dev libx11-dev \
+    openjdk-8-jre-headless ninja-build ant mesa-common-dev libglu1-mesa-dev libfontconfig1-dev libfreetype6-dev libx11-dev \
                            libxext-dev libxfixes-dev libxi-dev libxrender-dev libxcb1-dev libx11-xcb-dev \
                            libxcb-glx0-dev libxkbcommon-x11-dev libssl-dev libxkbcommon-dev libxkbcommon-x11-dev \
                            libxcb-xinerama0-dev libxcb-render-util0-dev  libxcb-icccm4-dev libxcb-util-dev libxcb-shm0-dev \
                            libxcb-image0-dev libxcb-keysyms1-dev \
-                           bluez libbluetooth-dev
+                           bluez libbluetooth-dev python3-pip curl sudo bash-completion vim
 RUN pip3 install conan cmake-format
 
-# download and install qt
-RUN git clone https://code.qt.io/qt/qt5.git
-WORKDIR qt5
-RUN git checkout v${QT_VERSION}
-RUN perl init-repository
-WORKDIR ./qt-build
-RUN ../configure -xcb -xcb-xlib -qt-zlib -qt-libjpeg -qt-libpng -system-freetype -fontconfig -qt-pcre -qt-harfbuzz -opensource -nomake examples -nomake tests -confirm-license -prefix "/usr/local/Qt/gcc_64"
-RUN make -s -j$(nproc)
-RUN make install
+COPY --from=bernedom/qt_x86_64:5.15.2 /usr/local/Qt /usr/local/Qt/gcc_64
+COPY --from=bernedom/qt_android:5.15.2 /usr/local/Qt /usr/local/Qt/android
+COPY --from=bernedom/qt_android:5.15.2 /opt/android-sdk /opt/android-sdk
+COPY --from=bernedom/qt_android:5.15.2 /opt/android-ndk /opt/android-ndk
+
+WORKDIR /tmp
+
+RUN curl -OL https://github.com/Kitware/CMake/releases/download/v3.22.2/cmake-3.22.2.tar.gz && tar -xvzf cmake-3.22.2.tar.gz
+RUN cd cmake-3.22.2 && ./bootstrap && make -j $(nproc) && make install 
+
 WORKDIR /
-RUN rm -rf qt
 
-# Download & unpack android SDK
-RUN echo "${SDK_SHA256} -" > sum.txt && curl -fLs "${SDK_URL}" | tee /tmp/sdk-tools.zip | sha256sum -c sum.txt \
-    && mkdir -p /opt/android-sdk && unzip -q /tmp/sdk-tools.zip -d /opt/android-sdk && rm -f /tmp/sdk-tools.zip \
-    && yes | sdkmanager --licenses && sdkmanager --update && sdkmanager --verbose "platforms;${SDK_PLATFORM}" "build-tools;${SDK_BUILD_TOOLS}" ${SDK_PACKAGES}
-
-# Download & unpack android NDK
-RUN mkdir /tmp/android && cd /tmp/android && echo "${NDK_SHA256} -" > sum.txt && curl -fLs "${NDK_URL}" | tee ndk.zip | sha256sum -c sum.txt \
-    && unzip -q ndk.zip && mv android-ndk-* $ANDROID_NDK_ROOT && chmod -R +rX $ANDROID_NDK_ROOT \
-    && rm -rf /tmp/android
-
-# Reconfigure locale
-RUN locale-gen en_US.UTF-8 && dpkg-reconfigure locales
 
 # Add group & user
 RUN groupadd -r builder && useradd --create-home --gid builder --shell /bin/bash builder && echo 'builder ALL=NOPASSWD: ALL' > /etc/sudoers.d/builder
@@ -64,3 +49,5 @@ RUN groupadd -r builder && useradd --create-home --gid builder --shell /bin/bash
 # #install git shell extension
 RUN curl -L https://raw.github.com/git/git/master/contrib/completion/git-prompt.sh > ~/.bash_git && echo "source ~/.bash_git" >> ~/.bashrc
 RUN sed -Ei 's/(PS1=.*)(\\\[\\033\[00m\\\]\\\$.*)/\1\\[\\033[01;33m\\]$(__git_ps1)\2/p' ~/.bashrc
+
+USER builder
