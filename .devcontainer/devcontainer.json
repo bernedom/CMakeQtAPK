@@ -13,9 +13,13 @@
     "remoteEnv": {
         "DISPLAY": "${localEnv:DISPLAY}"
     },
+    "mounts": [
+        "type=bind,source=/dev/bus/usb,target=/dev/bus/usb"
+    ],
     "runArgs": [
         "--device=/dev/dri:/dev/dri",
         "--net=host",
-        "--cpus=6"
+        "--cpus=6",
+        "--privileged"
     ]
 }

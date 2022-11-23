@@ -22,8 +22,7 @@
                 "ANDROID_ABI": "armeabi-v7a",
                 "ANDROID_PLATFORM": "23",
                 "ANDROID_SDK": "/opt/android-sdk",
-                "CMAKE_FIND_ROOT_PATH_MODE_PACKAGE": "BOTH",
-                "ANDROID_BUILD_ABI_armeabi-v7a" : "ON"
+                "ANDROID_BUILD_ABI_armeabi-v7a": "ON"
             },
             "environment": {
                 "JAVA_HOME": "/usr/lib/jvm/java-1.8.0-openjdk-amd64",
@@ -44,7 +43,8 @@
             "name": "Qt-android",
             "hidden": true,
             "cacheVariables": {
-                "CMAKE_PREFIX_PATH": "/usr/local/Qt/android"
+                "CMAKE_PREFIX_PATH": "/usr/local/Qt/android",
+                "CMAKE_FIND_ROOT_PATH_MODE_PACKAGE": "BOTH"
             }
         },
         {
