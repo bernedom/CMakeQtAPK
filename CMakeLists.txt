@@ -7,7 +7,7 @@ project(
     "An example repository to showcase how to build a simple C++ android app with Qt/QML and CMake"
   LANGUAGES CXX)
 
-find_package(Qt5 REQUIRED COMPONENTS Core Quick QuickWidgets Gui)
+find_package(Qt5 REQUIRED COMPONENTS Core Quick)
 set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
 
 
